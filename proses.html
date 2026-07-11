@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proses - KPPN Digipay Monitoring</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  </head>
+  <body>
+    <script src="assets/js/auth-guard.js"></script>
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <div class="container">
+        <div class="page-header"><h1>⚙️ Proses</h1></div>
+        <div class="content-card">
+          <div class="toolbar">
+            <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="searchProses" placeholder="Cari..." /></div>
+            <select id="statusFilter"><option value="">Semua Status</option><option value="SUDAH">Sudah</option><option value="BELUM">Belum</option></select>
+            <button class="btn btn-print" id="btnPrint"><span>🖨️</span> Cetak PDF</button>
+            <button class="btn btn-success" id="btnExport"><span>📊</span> Export Excel</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Kode</th><th>Nama Satker</th><th>Status</th><th>Proses Transaksi</th><th>Transaksi</th><th>VA Terbayar</th></tr></thead>
+              <tbody id="prosesTableBody"><tr><td colspan="6" class="loading">Memuat data...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/calc.js"></script>
+    <script src="assets/js/proses.js"></script>
+    <script>
+      renderSidebar("sheet-proses");
+      prosesPage.init();
+    </script>
+  </body>
+</html>

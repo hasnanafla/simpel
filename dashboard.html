@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - KPPN Digipay Monitoring</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <script src="assets/js/auth-guard.js"></script>
+
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <div class="container">
+        <div class="page-header">
+          <h1>📊 Dashboard</h1>
+          <p>Monitoring Digipay Satuan Kerja KPPN Pekalongan</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><h3>Total Satker</h3><div class="value" id="totalSatker">0</div><div class="sub">Terdaftar di sistem</div></div>
+          <div class="stat-card green"><h3>Sudah Implementasi</h3><div class="value" id="sudahImplement">0</div><div class="sub" id="pctSudah">0% dari total satker</div></div>
+          <div class="stat-card amber"><h3>Belum Implementasi</h3><div class="value" id="belumImplement">0</div><div class="sub" id="pctBelum">0% dari total satker</div></div>
+          <div class="stat-card"><h3>Total Transaksi</h3><div class="value" id="totalTransaksi">0</div><div class="sub">Semua transaksi</div></div>
+        </div>
+
+        <div class="stats-grid" style="margin-bottom:24px">
+          <div class="stat-card purple"><h3>VA Terbayar</h3><div class="value" id="totalVA">0</div><div class="sub">Transaksi via VA</div></div>
+          <div class="stat-card green"><h3>Transaksi Berhasil</h3><div class="value" id="trxBerhasil">0</div><div class="sub">Status Berhasil</div></div>
+          <div class="stat-card amber"><h3>Transaksi Dikembalikan</h3><div class="value" id="trxPending">0</div><div class="sub">Dikembalikan</div></div>
+          <div class="stat-card red"><h3>Transaksi Dibatalkan</h3><div class="value" id="deadlineCount">0</div><div class="sub">Status Batal</div></div>
+        </div>
+
+        <div class="chart-card" style="margin-bottom:24px">
+          <h3>Progress Implementasi Digipay</h3>
+          <p>Persentase satker yang telah menggunakan Digipay</p>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:4px">
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:6px">
+                <span>Sudah Implementasi</span><span id="progressLabel" style="font-weight:600;color:#2563eb">0 / 0</span>
+              </div>
+              <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+            </div>
+            <div style="font-size:28px;font-weight:700;color:#2563eb;min-width:60px;text-align:right" id="progressPct">0%</div>
+          </div>
+        </div>
+
+        <div id="alertSection" class="alert-card" style="display:none">
+          <h3>⚠️ Perhatian — Deadline Mendekat (7 Hari)</h3>
+          <div id="alertList"></div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card full-width">
+            <h3>🏆 Top 10 Satker Terbaik</h3>
+            <p>Berdasarkan jumlah transaksi VA terbayar</p>
+            <div class="chart-wrapper" style="height:360px"><canvas id="chartTopSatker"></canvas></div>
+          </div>
+
+          <div class="chart-card">
+            <h3>🔵 Status Implementasi</h3>
+            <p>Distribusi sudah vs belum Digipay</p>
+            <div class="chart-wrapper" style="height:260px"><canvas id="chartStatus"></canvas></div>
+          </div>
+
+          <div class="chart-card">
+            <h3>💳 Distribusi Metode Bayar</h3>
+            <p>Komposisi VA, Transfer, dan Tunai</p>
+            <div class="chart-wrapper" style="height:260px"><canvas id="chartMetode"></canvas></div>
+          </div>
+
+          <div class="chart-card full-width">
+            <h3>📅 Tren Transaksi per Bulan</h3>
+            <p>Jumlah transaksi masuk setiap bulan</p>
+            <div class="chart-wrapper" style="height:260px"><canvas id="chartTren"></canvas></div>
+          </div>
+
+          <div class="chart-card full-width">
+            <h3>💰 Realisasi Nominal UP/RM per Satker (Top 10)</h3>
+            <p>Total nominal transaksi yang sudah diproses dibanding UP/RM yang ditetapkan</p>
+            <div class="chart-wrapper" style="height:320px"><canvas id="chartRealisasi"></canvas></div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3 style="color:#1e40af;font-size:18px;margin-bottom:6px">🏅 Ranking Satker Terbaik</h3>
+          <p style="color:#94a3b8;font-size:13px;margin-bottom:20px">Urutan satker berdasarkan jumlah VA terbayar</p>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Rank</th><th>Kode Satker</th><th>Nama Satker</th><th>Proses Transaksi</th><th>VA Terbayar</th><th>Transaksi Berhasil</th><th>Status</th></tr></thead>
+              <tbody id="rankingTableBody"><tr><td colspan="7" class="loading">Memuat data...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/calc.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <script>
+      renderSidebar("dashboard");
+      dashboardPage.init();
+    </script>
+  </body>
+</html>

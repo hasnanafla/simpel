@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rekap Digipay - KPPN Digipay Monitoring</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  </head>
+  <body>
+    <script src="assets/js/auth-guard.js"></script>
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <div class="container">
+        <div class="page-header"><h1>📈 Rekap Digipay</h1><p>Monitoring Digipay Satuan Kerja KPPN Pekalongan</p></div>
+        <div class="content-card">
+          <div class="toolbar">
+            <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="searchRekap" placeholder="Cari..." /></div>
+            <select id="statusFilterRekap"><option value="">Semua Status</option><option value="SUDAH">Sudah</option><option value="BELUM">Belum</option></select>
+            <button class="btn btn-print" id="btnPrint"><span>🖨️</span> Cetak PDF</button>
+            <button class="btn btn-success" id="btnExport"><span>📊</span> Export Excel</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>No</th><th>Kode Satker</th><th>Satker</th><th>Nominal</th><th>Proses Transaksi</th><th>VA Terbayar</th><th>Transaksi VA</th><th>Status</th><th>Keterangan</th></tr></thead>
+              <tbody id="rekapTableBody"><tr><td colspan="9" class="loading">Memuat data...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/calc.js"></script>
+    <script src="assets/js/rekap.js"></script>
+    <script>
+      renderSidebar("rekap-digipay");
+      rekapPage.init();
+    </script>
+  </body>
+</html>

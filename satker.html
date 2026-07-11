@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Satker - KPPN Digipay Monitoring</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  </head>
+  <body>
+    <script src="assets/js/auth-guard.js"></script>
+
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <div class="container">
+        <div class="page-header"><h1>🏢 Data Satker</h1><p>Kelola Data Satuan Kerja KPPN Pekalongan</p></div>
+        <div class="content-card">
+          <div class="toolbar">
+            <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="searchSatker" placeholder="Cari satker..." /></div>
+            <button class="btn btn-primary" id="btnAddSatker"><span>+</span> Tambah Satker</button>
+            <button class="btn btn-success" id="btnImportSatker"><span>📥</span> Import Excel</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>No</th><th>Kode Satker</th><th>Satker</th><th>Nominal (UP/RM)</th><th>Nomor WA</th><th>Aksi</th></tr></thead>
+              <tbody id="satkerTableBody"><tr><td colspan="6" class="loading">Memuat data...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL SATKER -->
+    <div id="satkerModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header"><h2 id="satkerModalTitle">Tambah Data Satker</h2><button class="close-btn" id="closeSatkerModal">&#215;</button></div>
+        <form id="satkerForm">
+          <div class="form-group"><label>Kode Satker</label><input type="text" id="kodeSatkerDash" required /></div>
+          <div class="form-group"><label>Nama Satker</label><input type="text" id="namaSatkerDash" required /></div>
+          <div class="form-group"><label>Nominal (UP/RM)</label><input type="number" id="upRM" value="0" /></div>
+          <div class="form-group"><label>Nomor WhatsApp</label><input type="tel" id="nomorWA" placeholder="628123456789" /></div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-cancel" id="cancelSatker">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL WHATSAPP -->
+    <div id="whatsappModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header"><h2>Kirim Notifikasi WhatsApp</h2><button class="close-btn" id="closeWhatsappModal">&#215;</button></div>
+        <form id="whatsappForm">
+          <div class="form-group"><label>Nama Satker</label><input type="text" id="waSatkerName" readonly /></div>
+          <div class="form-group"><label>Nomor WhatsApp</label><input type="tel" id="waNumber" required /></div>
+          <div class="form-group"><label>Pesan</label><textarea id="waMessage" readonly></textarea></div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-cancel" id="cancelWhatsapp">Batal</button>
+            <button type="submit" class="btn btn-success">&#128241; Kirim WhatsApp</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL IMPORT -->
+    <div id="importModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header"><h2>Import Data Satker dari Excel</h2><button class="close-btn" id="closeImportModal">&#215;</button></div>
+        <div style="margin-bottom:20px">
+          <p style="color:#64748b;margin-bottom:15px"><strong>Kolom wajib:</strong> kode_satker, nama_satker</p>
+          <p style="color:#64748b;font-size:12px">Opsional: nominal, nomor_wa</p>
+        </div>
+        <div class="form-group">
+          <label>Pilih File Excel (.xlsx atau .xls)</label>
+          <input type="file" id="excelFile" accept=".xlsx,.xls" style="padding:10px;border:2px dashed #2563eb;background:#eff6ff;width:100%" />
+        </div>
+        <div id="previewContainer" style="display:none;margin-top:20px">
+          <h3 style="color:#2563eb;margin-bottom:10px">Preview Data (5 baris pertama)</h3>
+          <div style="max-height:300px;overflow:auto"><table id="previewTable" style="width:100%;font-size:12px"></table></div>
+          <p id="previewInfo" style="margin-top:10px;color:#64748b;font-size:13px"></p>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-cancel" id="cancelImport">Batal</button>
+          <button type="button" class="btn btn-primary" id="btnProcessImport" disabled>&#11014;&#65039; Proses Import</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/satker.js"></script>
+    <script>
+      renderSidebar("data-satker");
+      satkerPage.init();
+    </script>
+  </body>
+</html>

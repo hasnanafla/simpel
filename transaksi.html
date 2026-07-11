@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Transaksi - KPPN Digipay Monitoring</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  </head>
+  <body>
+    <script src="assets/js/auth-guard.js"></script>
+
+    <div id="sidebar-container"></div>
+
+    <div class="main-wrapper">
+      <div class="container">
+        <div class="page-header"><h1>💳 Data Transaksi</h1><p>Kelola Data Transaksi Digipay Lengkap</p></div>
+        <div class="content-card">
+          <div class="toolbar">
+            <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="searchTransaksi" placeholder="Cari..." /></div>
+            <button class="btn btn-primary" id="btnAddTransaksi"><span>+</span> Tambah Transaksi</button>
+            <button class="btn btn-success" id="btnImportTransaksi"><span>📥</span> Import Excel</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>No</th><th>Tanggal Pembelian</th><th>KPPN</th><th>Satuan Kerja</th><th>Pejabat Pengadaan</th><th>Produk</th><th>Total Nominal</th><th>No Rekening</th><th>No Invoice</th><th>Metode Bayar</th><th>Status Transaksi</th><th>Tgl Deadline</th><th>Tgl Jatuh Tempo</th><th>Tgl Checkout</th><th>Tgl Kirim</th><th>Tgl Terima</th><th>Tgl Bayar</th><th>Aksi</th></tr></thead>
+              <tbody id="transaksiTableBody"><tr><td colspan="18" class="loading">Memuat data...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL TRANSAKSI -->
+    <div id="transaksiModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header"><h2 id="transaksiModalTitle">Tambah Data Transaksi</h2><button class="close-btn" id="closeTransaksiModal">&#215;</button></div>
+        <form id="transaksiForm">
+          <div class="form-row">
+            <div class="form-group"><label>Tanggal Pembelian</label><input type="date" id="tglPembelian" required /></div>
+            <div class="form-group"><label>KPPN</label><input type="text" id="kppn" value="KPPN PEKALONGAN" required readonly /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group autocomplete-container">
+              <label>Kode Satker</label>
+              <input type="text" id="kodeSatker" required autocomplete="off" placeholder="Ketik atau pilih..." />
+              <div id="kodeSatkerDropdown" class="autocomplete-dropdown"></div>
+            </div>
+            <div class="form-group"><label>Satuan Kerja</label><input type="text" id="satker" required readonly /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Pejabat Pengadaan</label><input type="text" id="pejabat" required /></div>
+            <div class="form-group"><label>Produk</label><input type="text" id="produk" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Total Nominal</label><input type="number" id="totalNominal" required /></div>
+            <div class="form-group"><label>No Rekening</label><input type="text" id="noRekening" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>No Invoice</label><input type="text" id="noInvoice" required /></div>
+            <div class="form-group"><label>Metode Bayar</label><select id="metodeBayar"><option value="VA">VA</option><option value="Transfer">Transfer</option><option value="Tunai">Tunai</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Status Transaksi</label><select id="statusTransaksi"><option value="Pending">Pending</option><option value="Berhasil">Berhasil</option><option value="Gagal">Gagal</option></select></div>
+            <div class="form-group"><label>Tanggal Deadline</label><input type="date" id="tglDeadline" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Tanggal Jatuh Tempo</label><input type="date" id="tglJatuhTempo" /></div>
+            <div class="form-group"><label>Tanggal Checkout</label><input type="date" id="tglCheckout" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Tanggal Kirim</label><input type="date" id="tglKirim" /></div>
+            <div class="form-group"><label>Tanggal Terima</label><input type="date" id="tglTerima" /></div>
+          </div>
+          <div class="form-group"><label>Tanggal Bayar</label><input type="date" id="tglBayar" /></div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-cancel" id="cancelTransaksi">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL IMPORT -->
+    <div id="importModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header"><h2>Import Data Transaksi dari Excel</h2><button class="close-btn" id="closeImportModal">&#215;</button></div>
+        <div style="margin-bottom:20px">
+          <p style="color:#64748b;margin-bottom:15px"><strong>Kolom wajib:</strong> tanggal_pembelian, kode_satker, satuan_kerja</p>
+          <p style="color:#64748b;font-size:12px">Format tanggal: YYYY-MM-DD</p>
+        </div>
+        <div class="form-group">
+          <label>Pilih File Excel (.xlsx atau .xls)</label>
+          <input type="file" id="excelFile" accept=".xlsx,.xls" style="padding:10px;border:2px dashed #2563eb;background:#eff6ff;width:100%" />
+        </div>
+        <div id="previewContainer" style="display:none;margin-top:20px">
+          <h3 style="color:#2563eb;margin-bottom:10px">Preview Data (5 baris pertama)</h3>
+          <div style="max-height:300px;overflow:auto"><table id="previewTable" style="width:100%;font-size:12px"></table></div>
+          <p id="previewInfo" style="margin-top:10px;color:#64748b;font-size:13px"></p>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-cancel" id="cancelImport">Batal</button>
+          <button type="button" class="btn btn-primary" id="btnProcessImport" disabled>&#11014;&#65039; Proses Import</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/transaksi.js"></script>
+    <script>
+      renderSidebar("data-transaksi");
+      transaksiPage.init();
+    </script>
+  </body>
+</html>

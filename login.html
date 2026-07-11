@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - KPPN Digipay Monitoring</title>
+    <link rel="stylesheet" href="assets/css/login.css" />
+  </head>
+  <body>
+    <div class="login-card">
+      <div class="login-header">
+        <div class="logo">🏛️</div>
+        <h1>KPPN Sistem</h1>
+        <p>Digipay Monitoring — Silakan login untuk melanjutkan</p>
+      </div>
+
+      <div class="login-error" id="loginError"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginUsername">Username</label>
+          <input type="text" id="loginUsername" placeholder="Masukkan username" required autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="Masukkan password" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="login-btn" id="loginBtn">Masuk</button>
+      </form>
+
+      <div class="login-footer">
+        Sistem Manajemen Data Digipay<br />
+        KPPN Pekalongan
+      </div>
+    </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/login.js"></script>
+  </body>
+</html>

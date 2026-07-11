@@ -1,0 +1,9 @@
+{
+  "name": "kppn-digipay-monitoring",
+  "version": "2.0.0",
+  "private": true,
+  "description": "KPPN Pekalongan Digipay Monitoring - multi-page + Netlify Functions proxy",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}

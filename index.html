@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0; url=dashboard.html" />
+    <title>KPPN Digipay Monitoring</title>
+  </head>
+  <body>
+    <script>
+      const raw = localStorage.getItem("kppn_session");
+      window.location.replace(raw ? "dashboard.html" : "login.html");
+    </script>
+    <p>Mengalihkan... jika tidak otomatis, <a href="login.html">klik di sini</a>.</p>
+  </body>
+</html>
