@@ -110,5 +110,86 @@ select:focus { outline: none; border-color: #2563eb; }
 @media (max-width: 1100px) { .charts-grid { grid-template-columns: 1fr; } }
 @media (max-width: 768px) { .sidebar { transform: translateX(-100%); } .main-wrapper { margin-left: 0; } .form-row { grid-template-columns: 1fr; } }
 @media print { .toolbar, .btn, .sidebar { display: none; } .main-wrapper { margin-left: 0; } }
+/* ===== FILTER PERIODE ===== */
+.toolbar { flex-wrap: wrap; }
+
+.filter-group select {
+  height: 38px;
+  padding: 0 12px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #334155;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+.filter-group select:focus { outline: none; border-color: #2563eb; }
+
+.filter-date-range {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: #eff6ff;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 5px 12px;
+}
+.filter-date-range.visible { display: flex; }
+
+.filter-date-range input[type="date"] {
+  height: 32px;
+  padding: 0 8px;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 7px;
+  font-size: 13px;
+  color: #334155;
+  background: #fff;
+}
+.filter-date-range input[type="date"]:focus { outline: none; border-color: #2563eb; }
+
+.filter-sep { color: #64748b; font-weight: 600; font-size: 13px; }
+
+.btn-filter {
+  height: 32px;
+  padding: 0 14px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-filter:hover { background: #1d4ed8; }
+
+.btn-reset-filter {
+  height: 38px;
+  width: 38px;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-reset-filter:hover { background: #e2e8f0; color: #1e293b; }
+
+/* Badge filter aktif */
+#filterBadge {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 6px;
+  padding: 5px 14px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+#filterBadge.visible { display: flex; }
 
 
