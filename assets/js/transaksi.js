@@ -3,9 +3,11 @@ const transaksiPage = {
   satkerData: [],
   currentEdit: null,
   importData: null,
+  activeFilter: null, // { start, end, label }
 
   async init() {
     this.setupEventListeners();
+    this.setupFilterListeners(); // <-- tambahan
     await this.load();
   },
 
@@ -27,7 +29,6 @@ const transaksiPage = {
     on("cancelTransaksi", "click", () => this.closeModal());
     on("transaksiForm", "submit", (e) => this.save(e));
     on("searchTransaksi", "input", () => this.render());
-
     on("btnImportTransaksi", "click", () => this.showImportModal());
     on("closeImportModal", "click", () => this.closeImportModal());
     on("cancelImport", "click", () => this.closeImportModal());
@@ -35,17 +36,140 @@ const transaksiPage = {
     on("btnProcessImport", "click", () => this.processImport());
   },
 
+  // ─── FILTER LOGIC ────────────────────────────────────────────────────────────
+
+  setupFilterListeners() {
+    const on = (id, ev, fn) => document.getElementById(id)?.addEventListener(ev, fn);
+
+    on("filterPeriode", "change", () => {
+      const val = document.getElementById("filterPeriode").value;
+      const rangeEl = document.getElementById("customDateRange");
+
+      if (val === "custom") {
+        rangeEl.classList.add("visible");
+      } else {
+        rangeEl.classList.remove("visible");
+        if (val) this.applyPresetFilter(val);
+        else this.resetFilter();
+      }
+    });
+
+    on("btnApplyFilter", "click", () => this.applyCustomFilter());
+    on("btnResetFilter", "click", () => this.resetFilter());
+  },
+
+  getPresetRange(preset) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    if (preset === "today") {
+      return { start: today, end: today, label: "Hari Ini" };
+    }
+    if (preset === "this_week") {
+      const day = today.getDay();
+      const diffToMon = day === 0 ? -6 : 1 - day;
+      const start = new Date(today);
+      start.setDate(today.getDate() + diffToMon);
+      return { start, end: today, label: "Minggu Ini" };
+    }
+    if (preset === "this_month") {
+      const start = new Date(today.getFullYear(), today.getMonth(), 1);
+      return { start, end: today, label: "Bulan Ini" };
+    }
+    if (preset === "this_year") {
+      const start = new Date(today.getFullYear(), 0, 1);
+      return { start, end: today, label: "Tahun Ini" };
+    }
+    return null;
+  },
+
+  applyPresetFilter(preset) {
+    const range = this.getPresetRange(preset);
+    if (!range) return;
+    this.activeFilter = range;
+    this.render();
+    this.showBadge(range);
+  },
+
+  applyCustomFilter() {
+    const awal = document.getElementById("filterTglAwal").value;
+    const akhir = document.getElementById("filterTglAkhir").value;
+    if (!awal || !akhir) { alert("Isi tanggal awal dan akhir terlebih dahulu."); return; }
+    if (awal > akhir) { alert("Tanggal awal tidak boleh lebih dari tanggal akhir."); return; }
+
+    const fmt = (s) => {
+      const [y, m, d] = s.split("-");
+      return `${d}/${m}/${y}`;
+    };
+    this.activeFilter = {
+      start: new Date(awal),
+      end: new Date(akhir + "T23:59:59"),
+      label: `${fmt(awal)} – ${fmt(akhir)}`,
+    };
+    this.render();
+    this.showBadge(this.activeFilter);
+  },
+
+  resetFilter() {
+    this.activeFilter = null;
+    document.getElementById("filterPeriode").value = "";
+    document.getElementById("customDateRange").classList.remove("visible");
+    document.getElementById("filterTglAwal").value = "";
+    document.getElementById("filterTglAkhir").value = "";
+    this.hideBadge();
+    this.render();
+  },
+
+  showBadge({ label }) {
+    const badge = document.getElementById("filterBadge");
+    if (!badge) return;
+    // Hitung dulu setelah render
+    const count = this._lastFilteredCount || 0;
+    badge.innerHTML = `🔎 Filter aktif: <strong>${label}</strong> &mdash; <span id="badgeCount">${count}</span> transaksi ditemukan`;
+    badge.classList.add("visible");
+  },
+
+  hideBadge() {
+    document.getElementById("filterBadge")?.classList.remove("visible");
+  },
+
+  // ─── RENDER ──────────────────────────────────────────────────────────────────
+
   render() {
     const q = (document.getElementById("searchTransaksi").value || "").toLowerCase();
-    const filtered = this.data.filter((t) =>
+
+    let filtered = this.data.filter((t) =>
       (t.kode_satker || "").toLowerCase().includes(q) ||
       (t.satuan_kerja || "").toLowerCase().includes(q) ||
       (t.pejabat_pengadaan || "").toLowerCase().includes(q) ||
       (t.nomor_invoice || "").toLowerCase().includes(q) ||
       (t.kppn || "").toLowerCase().includes(q)
     );
+
+    // Terapkan filter tanggal jika aktif
+    if (this.activeFilter) {
+      const { start, end } = this.activeFilter;
+      const endOfDay = new Date(end);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      filtered = filtered.filter((t) => {
+        if (!t.tanggal_pembelian) return false;
+        const tgl = new Date(t.tanggal_pembelian);
+        return tgl >= start && tgl <= endOfDay;
+      });
+
+      // Update badge count setelah filter
+      this._lastFilteredCount = filtered.length;
+      const countEl = document.getElementById("badgeCount");
+      if (countEl) countEl.textContent = filtered.length;
+    }
+
     const tbody = document.getElementById("transaksiTableBody");
-    if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="18" class="loading">Tidak ada data</td></tr>'; return; }
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="18" class="loading">${this.activeFilter ? "Tidak ada transaksi pada periode ini." : "Tidak ada data"}</td></tr>`;
+      return;
+    }
+
     tbody.innerHTML = filtered.map((t, i) => `<tr>
       <td>${i + 1}</td><td>${t.tanggal_pembelian || "-"}</td><td>${t.kppn || "-"}</td><td>${t.satuan_kerja || "-"}</td>
       <td>${t.pejabat_pengadaan || "-"}</td><td>${t.produk || "-"}</td><td>Rp ${(t.total_nominal || 0).toLocaleString("id-ID")}</td>
@@ -53,10 +177,14 @@ const transaksiPage = {
       <td><span class="badge ${t.status_transaksi === "Berhasil" ? "badge-success" : t.status_transaksi === "Pending" ? "badge-warning" : "badge-danger"}">${t.status_transaksi || "Pending"}</span></td>
       <td>${t.tanggal_deadline || "-"}</td><td>${t.tanggal_jatuh_tempo || "-"}</td><td>${t.tanggal_checkout || "-"}</td>
       <td>${t.tanggal_kirim || "-"}</td><td>${t.tanggal_terima || "-"}</td><td>${t.tanggal_bayar || "-"}</td>
-      <td><button class="btn-icon btn-edit" onclick="transaksiPage.edit(${t.no})">✏️</button>
-      <button class="btn-icon btn-delete" onclick="transaksiPage.remove(${t.no})">🗑️</button></td>
+      <td>
+        <button class="btn-icon btn-edit" onclick="transaksiPage.edit(${t.no})">✏️</button>
+        <button class="btn-icon btn-delete" onclick="transaksiPage.remove(${t.no})">🗑️</button>
+      </td>
     </tr>`).join("");
   },
+
+  // ─── MODAL & CRUD (tidak berubah) ────────────────────────────────────────────
 
   openModal(data = null) {
     this.currentEdit = data;
