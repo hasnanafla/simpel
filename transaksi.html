@@ -17,47 +17,7 @@
         <div class="page-header"><h1>💳 Data Transaksi</h1><p>Kelola Data Transaksi Digipay Lengkap</p></div>
         <div class="content-card">
           <div class="toolbar">
-            <!-- Letakkan setelah div.search-box, sebelum button btnAddTransaksi -->
-<div class="filter-group">
-  <select id="filterPeriode">
-    <option value="">📅 Semua Periode</option>
-    <option value="today">Hari Ini</option>
-    <option value="this_week">Minggu Ini</option>
-    <option value="this_month">Bulan Ini</option>
-    <option value="this_year">Tahun Ini</option>
-    <option value="custom">📆 Pilih Tanggal...</option>
-  </select>
-</div>
-
-<div class="filter-date-range" id="customDateRange">
-  <input type="date" id="filterTglAwal" />
-  <span class="filter-sep">s/d</span>
-  <input type="date" id="filterTglAkhir" />
-  <button class="btn btn-filter" id="btnApplyFilter">Terapkan</button>
-</div>
-
-<button class="btn btn-reset-filter" id="btnResetFilter" title="Reset Filter">↺</button>
-<div id="filterBadge"></div>
             <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="searchTransaksi" placeholder="Cari..." /></div>
-<div class="filter-group">
-  <select id="filterPeriode" title="Filter Periode">
-    <option value="">-- Semua Periode --</option>
-    <option value="today">Hari Ini</option>
-    <option value="this_week">Minggu Ini</option>
-    <option value="this_month">Bulan Ini</option>
-    <option value="this_year">Tahun Ini</option>
-    <option value="custom">Pilih Tanggal...</option>
-  </select>
-</div>
-
-<div class="filter-group date-range-group" id="customDateRange" style="display:none">
-  <input type="date" id="filterTglAwal" title="Dari Tanggal" />
-  <span style="color:#64748b;font-weight:600">s/d</span>
-  <input type="date" id="filterTglAkhir" title="Sampai Tanggal" />
-  <button class="btn btn-filter" id="btnApplyFilter">Terapkan</button>
-</div>
-
-<button class="btn btn-reset" id="btnResetFilter" title="Reset Filter">↺ Reset</button>
             <button class="btn btn-primary" id="btnAddTransaksi"><span>+</span> Tambah Transaksi</button>
             <button class="btn btn-success" id="btnImportTransaksi"><span>📥</span> Import Excel</button>
           </div>
