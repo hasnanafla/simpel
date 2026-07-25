@@ -16,7 +16,7 @@
 
 function showError(msg) {
   const el = document.getElementById("loginError");
-  el.textContent = "❌ " + msg;
+  el.textContent = "X " + msg;
   el.classList.add("active");
 }
 function clearError() {
@@ -25,7 +25,7 @@ function clearError() {
 function setLoading(isLoading) {
   const btn = document.getElementById("loginBtn");
   btn.disabled = isLoading;
-  btn.textContent = isLoading ? "⏳ Memproses..." : "Masuk";
+  btn.textContent = isLoading ? "Memproses..." : "Masuk";
 }
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
