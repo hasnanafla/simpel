@@ -1,10 +1,10 @@
 const MENU_ITEMS = [
-  { page: "dashboard", href: "dashboard.html", icon: "📊", label: "Dashboard" },
-  { page: "data-satker", href: "satker.html", icon: "🏢", label: "Data Satker" },
-  { page: "data-transaksi", href: "transaksi.html", icon: "💳", label: "Data Transaksi" },
-  { page: "sheet-proses", href: "proses.html", icon: "⚙️", label: "Proses" },
-  { page: "rekap-digipay", href: "rekap.html", icon: "📈", label: "Rekap Digipay" },
-  { page: "manajemen-admin", href: "admin.html", icon: "👤", label: "Manajemen Admin" },
+  { page: "dashboard", href: "dashboard.html", icon: "", label: "Dashboard" },
+  { page: "data-satker", href: "satker.html", icon: "", label: "Data Satker" },
+  { page: "data-transaksi", href: "transaksi.html", icon: "", label: "Data Transaksi" },
+  { page: "sheet-proses", href: "proses.html", icon: "", label: "Proses" },
+  { page: "rekap-digipay", href: "rekap.html", icon: "", label: "Rekap Digipay" },
+  { page: "manajemen-admin", href: "admin.html", icon: "", label: "Manajemen Admin" },
 ];
 
 function renderSidebar(activePage) {
@@ -29,7 +29,7 @@ function renderSidebar(activePage) {
           <div class="user-info-text">Login Sebagai:</div>
           <div class="user-info-name" id="currentUsername">-</div>
         </div>
-        <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
       </div>
     </div>`;
 
