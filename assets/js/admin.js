@@ -42,8 +42,8 @@ const adminPage = {
     tbody.innerHTML = filtered.map((a, i) => {
       const tgl = a.created_at ? new Date(a.created_at).toLocaleString("id-ID", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "-";
       return `<tr><td>${i + 1}</td><td><strong>${a.username}</strong></td><td style="color:#64748b;font-size:13px">${tgl}</td>
-        <td><button class="btn-icon btn-edit" onclick="adminPage.edit(${a.id_admin})">✏️ Edit</button>
-        <button class="btn-icon btn-delete" onclick="adminPage.promptDelete(${a.id_admin},'${a.username}')">🗑️ Hapus</button></td></tr>`;
+        <td><button class="btn-icon btn-edit" onclick="adminPage.edit(${a.id_admin})">Edit</button>
+        <button class="btn-icon btn-delete" onclick="adminPage.promptDelete(${a.id_admin},'${a.username}')">Hapus</button></td></tr>`;
     }).join("");
   },
 
