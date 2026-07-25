@@ -63,7 +63,7 @@ const dashboardPage = {
       alertSection.style.display = "block";
       document.getElementById("alertList").innerHTML = deadlineItems.slice(0, 5).map((t) => {
         const daysLeft = Math.ceil((new Date(t.tanggal_deadline) - today) / 86400000);
-        return `<div class="alert-item"><span class="satker-name">${t.satuan_kerja || t.kode_satker} — Invoice: ${t.nomor_invoice || "-"}</span><span class="deadline">⏰ ${daysLeft} hari lagi (${t.tanggal_deadline})</span></div>`;
+        return `<div class="alert-item"><span class="satker-name">${t.satuan_kerja || t.kode_satker} — Invoice: ${t.nomor_invoice || "-"}</span><span class="deadline"> ${daysLeft} hari lagi (${t.tanggal_deadline})</span></div>`;
       }).join("");
     } else {
       alertSection.style.display = "none";
@@ -73,7 +73,7 @@ const dashboardPage = {
     document.getElementById("rankingTableBody").innerHTML = ranked.length
       ? ranked.map((r, i) => {
           const rankClass = i === 0 ? "rank-1" : i === 1 ? "rank-2" : i === 2 ? "rank-3" : "";
-          const rankIcon = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
+          const rankIcon = i === 0 ? "1" : i === 1 ? "2" : i === 2 ? "3" : "";
           return `<tr><td><span class="rank-badge ${rankClass}">${rankIcon || i + 1}</span></td><td>${r.kodeSatker}</td><td>${r.namaSatker}</td><td>${r.prosesTransaksi}</td><td><strong style="color:#2563eb">${r.vaTerbayar}</strong></td><td>${r.transaksi}</td><td><span class="badge ${r.status === "SUDAH" ? "badge-success" : "badge-danger"}">${r.status}</span></td></tr>`;
         }).join("")
       : '<tr><td colspan="7" class="loading">Tidak ada data</td></tr>';
