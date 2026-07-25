@@ -125,7 +125,7 @@ const transaksiPage = {
     if (!badge) return;
     // Hitung dulu setelah render
     const count = this._lastFilteredCount || 0;
-    badge.innerHTML = `🔎 Filter aktif: <strong>${label}</strong> &mdash; <span id="badgeCount">${count}</span> transaksi ditemukan`;
+    badge.innerHTML = `Filter aktif: <strong>${label}</strong> &mdash; <span id="badgeCount">${count}</span> transaksi ditemukan`;
     badge.classList.add("visible");
   },
 
@@ -178,8 +178,8 @@ const transaksiPage = {
       <td>${t.tanggal_deadline || "-"}</td><td>${t.tanggal_jatuh_tempo || "-"}</td><td>${t.tanggal_checkout || "-"}</td>
       <td>${t.tanggal_kirim || "-"}</td><td>${t.tanggal_terima || "-"}</td><td>${t.tanggal_bayar || "-"}</td>
       <td>
-        <button class="btn-icon btn-edit" onclick="transaksiPage.edit(${t.no})">✏️</button>
-        <button class="btn-icon btn-delete" onclick="transaksiPage.remove(${t.no})">🗑️</button>
+        <button class="btn-icon btn-edit" onclick="transaksiPage.edit(${t.no})">edit</button>
+        <button class="btn-icon btn-delete" onclick="transaksiPage.remove(${t.no})">hapus</button>
       </td>
     </tr>`).join("");
   },
