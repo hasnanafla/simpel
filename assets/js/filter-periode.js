@@ -101,9 +101,6 @@ const filterPeriode = {
     return `${parseInt(d, 10)} ${bulanIndo[parseInt(m, 10) - 1]} ${y}`;
   },
 
-  // Hitung rentang tanggal (dari, sampai) berdasarkan nama preset.
-  // Semua tanggal dikembalikan dalam format 'YYYY-MM-DD' agar cocok
-  // dengan <input type="date"> dan mudah dikirim ke server.
   computeRangeForPreset(preset) {
     const today = new Date();
     const pad = (n) => String(n).padStart(2, '0');
@@ -150,34 +147,8 @@ const filterPeriode = {
     return { dari: null, sampai: null };
   },
 
-  // Dipanggil setiap kali filter berubah. Ini titik hubung ke pemuatan data.
+  
   applyFilter() {
-    // =====================================================
-    // INTEGRASI DENGAN transaksiPage — SESUAIKAN DENGAN KODE ASLI
-    // =====================================================
-    // Karena tabel sudah pakai server-side pagination, filter periode
-    // sebaiknya dikirim sebagai parameter ke request yang sama (bukan
-    // filter di sisi client), supaya jumlah data & halaman tetap akurat.
-    //
-    // Contoh jika transaksiPage sudah punya fungsi loadData(options):
-    //
-    //   if (window.transaksiPage && typeof transaksiPage.loadData === 'function') {
-    //     transaksiPage.loadData({
-    //       page: 1, // reset ke halaman 1 setiap kali filter berubah
-    //       tglDari: this.state.dari,
-    //       tglSampai: this.state.sampai,
-    //     });
-    //   }
-    //
-    // Ganti nama fungsi & parameter di atas sesuai yang ada di transaksi.js.
-    // Kalau transaksi.js Anda memanggil endpoint Netlify Function untuk
-    // ambil data, tambahkan tglDari & tglSampai sebagai query param di sana,
-    // lalu di sisi server tambahkan filter:
-    //
-    //   let query = supabase.from('transaksi').select('*', { count: 'exact' });
-    //   if (tglDari) query = query.gte('tanggal_pembelian', tglDari);
-    //   if (tglSampai) query = query.lte('tanggal_pembelian', tglSampai);
-    //
     console.log('Filter periode diterapkan:', this.state);
 
     if (window.transaksiPage && typeof transaksiPage.loadData === 'function') {
@@ -189,8 +160,6 @@ const filterPeriode = {
     }
   },
 
-  // Panggil ini dari transaksiPage saat butuh tahu filter aktif
-  // (misalnya untuk fitur export PDF/Excel supaya ikut filter yang sama)
   getActiveFilter() {
     return {
       tglDari: this.state.dari,
