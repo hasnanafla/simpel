@@ -18,7 +18,6 @@ exports.handler = async (event) => {
       const clean = rows.map((r) => ({
         kode_satker: String(r.kode_satker || "").trim(),
         nama_satker: String(r.nama_satker || "").trim(),
-        nominal: parseFloat(r.nominal) || 0,
         nomor_wa: r.nomor_wa ? String(r.nomor_wa).trim() : null,
       }));
 
@@ -41,7 +40,6 @@ exports.handler = async (event) => {
       if (!body.kode_satker) return json(400, { error: "kode_satker wajib diisi" });
       const upd = {
         nama_satker: body.nama_satker,
-        nominal: parseFloat(body.nominal) || 0,
         nomor_wa: body.nomor_wa || null,
       };
       const { data, error } = await supabase
