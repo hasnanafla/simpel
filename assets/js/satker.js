@@ -75,7 +75,6 @@ const satkerPage = {
     const payload = {
       kode_satker: document.getElementById("kodeSatkerDash").value,
       nama_satker: document.getElementById("namaSatkerDash").value,
-      nominal: parseFloat(document.getElementById("upRM").value) || 0,
       nomor_wa: document.getElementById("nomorWA").value,
     };
     try {
@@ -154,7 +153,7 @@ const satkerPage = {
       const norm = (h) => (h ? String(h).toLowerCase().trim().replace(/\s+/g, "_") : "");
       const hmap = {};
       raw[0].forEach((h, i) => { hmap[norm(h)] = i; });
-      const maps = { kode_satker: ["kode_satker", "kode"], nama_satker: ["nama_satker", "satker", "nama"], nominal: ["nominal", "up_rm"], nomor_wa: ["nomor_wa", "wa", "whatsapp"] };
+      const maps = { kode_satker: ["kode_satker", "kode"], nama_satker: ["nama_satker", "satker", "nama"], nomor_wa: ["nomor_wa", "wa", "whatsapp"] };
       this.importData = raw.slice(1).filter((r) => r.some((c) => c !== null && c !== undefined && c !== "")).map((row) => {
         const obj = {};
         Object.keys(maps).forEach((k) => { for (const ph of maps[k]) { if (hmap[norm(ph)] !== undefined) { obj[k] = row[hmap[norm(ph)]]; break; } } });
@@ -181,7 +180,7 @@ const satkerPage = {
     try {
       const rows = this.importData
         .filter((r) => r.kode_satker && r.nama_satker)
-        .map((r) => ({ kode_satker: String(r.kode_satker).trim(), nama_satker: String(r.nama_satker).trim(), nominal: parseFloat(r.nominal) || 0, nomor_wa: r.nomor_wa ? String(r.nomor_wa).trim() : null }));
+        .map((r) => ({ kode_satker: String(r.kode_satker).trim(), nama_satker: String(r.nama_satker).trim(), nomor_wa: r.nomor_wa ? String(r.nomor_wa).trim() : null }));
       if (!rows.length) throw new Error("Tidak ada baris valid (kode_satker & nama_satker wajib)");
       await api.post("satker", rows);
       await this.load();
