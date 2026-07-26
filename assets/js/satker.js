@@ -44,7 +44,7 @@ const satkerPage = {
     if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="6" class="loading">Tidak ada data</td></tr>'; return; }
     tbody.innerHTML = filtered.map((d, i) => `<tr>
       <td>${i + 1}</td><td>${d.kode_satker || "-"}</td><td>${d.nama_satker || "-"}</td>
-      <td>Rp ${(d.nominal || 0).toLocaleString("id-ID")}</td><td>${d.nomor_wa || "-"}</td>
+     <td>${d.nomor_wa || "-"}</td>
       <td><button class="btn-icon btn-edit" onclick="satkerPage.edit('${d.kode_satker}')">✏️ Edit</button>
       <button class="btn-icon btn-whatsapp" onclick="satkerPage.prepareWhatsApp('${d.kode_satker}')">📱 WA</button></td>
     </tr>`).join("");
@@ -58,7 +58,6 @@ const satkerPage = {
     if (data) { ki.setAttribute("readonly", "readonly"); ki.style.background = "#f8fafc"; }
     else { ki.removeAttribute("readonly"); ki.style.background = "white"; }
     document.getElementById("namaSatkerDash").value = data?.nama_satker || "";
-    document.getElementById("upRM").value = data?.nominal || 0;
     document.getElementById("nomorWA").value = data?.nomor_wa || "";
     document.getElementById("satkerModal").classList.add("active");
   },
